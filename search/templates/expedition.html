@@ -1,0 +1,23 @@
+<div class="expedition">
+    <h2>{{ expedition.name }} <span>{{ expedition.date }}</span></h2>
+    {% if expedition.place %}
+        <h3>
+            {{ expedition.place }}
+            {% if expedition.note %}
+            ({{ expedition.note }})
+            {% endif %}
+        </h3>
+    {% endif %}
+    <br>
+    <div class="facts">
+        <p>{{ expedition.purpose }}</p>
+    </div>
+    <div class="links">
+        {% for link in links %}
+            <span class="exp-open" data-name="{{ link }}">
+                {{ link }}
+            </span>
+        {% endfor %}
+    </div>
+    <a href="http://data.library.amnh.org:8082/orbeon/xeac/id/{{ expedition.xeac_id }}" target="_blank">XEAC</a>
+</div>

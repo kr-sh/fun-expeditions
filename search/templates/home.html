@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block style %}
+<style>
+
+    body {
+        padding: 50px;
+        background: rgb(245, 245, 245);
+    }
+
+    #search {
+        width: 100%;
+        font: 35px sans-serif;
+        font-weight: 300;
+        padding: 25px;
+        border-radius: 10px;
+        outline: none;
+        border: solid 3px lightgray;
+        margin-bottom: 50px;
+    }
+
+    .people {
+        padding: 0 50px;
+    }
+
+    .person, .expedition {
+        background: white;
+        padding: 25px;
+        margin-bottom: 25px;
+    }
+
+    .person h2, .expedition h2 {
+        font: 35px sans-serif;
+        font-weight: 300;
+        margin-bottom: 5px;
+    }
+
+    .person h2 span, .expedition h2 span {
+        font: 20px sans-serif;
+        font-weight: 700;
+        color: rgb(150, 150, 200);
+        margin-top: 0;
+    }
+
+    .expedition .facts {
+        font: 15px sans-serif;
+        font-weight: 400;
+        line-height: 25px;
+    }
+
+    .highlight {
+        font: 30px sans-serif;
+        color: steelblue;
+        font-weight: 700;
+    }
+
+    .facts p {
+        font: 15px sans-serif;
+        font-weight: 400;
+        line-height: 25px;
+    }
+
+    .expedition h3 {
+        margin-top: 10px;
+        font: 20px sans-serif;
+        font-weight: 400;
+    }
+
+    .factoids {
+        margin: 25px 15px;
+        font: 20px sans-serif;
+        font-weight: 400;
+    }
+
+    .language {
+        padding: 7px 10px;
+        border-radius: 5px;
+        margin: 5px;
+        color: white;
+        background: rgba(100, 100, 200, 0.5);
+    }
+
+    /* -- Places -- */
+
+    .place {
+        padding: 20px;
+        margin-bottom: 10px;
+        background: rgb(245, 245, 245);
+    }
+
+    .role {
+        padding: 5px;
+        font: 10px sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: rgba(100, 100, 200, 0.5);
+    }
+
+    .place_name {
+        font: 20px sans-serif;
+    }
+
+    .expeditions {
+        margin: 25px 0;
+    }
+
+    .exp-open {
+        margin: 5px;
+        display: inline-block;
+        padding: 20px;
+        color: white;
+        background: rgba(100, 100, 200, 0.5);
+
+        -webkit-transition: 0.5s;
+    }
+
+    .exp-open:hover {
+        cursor: pointer;
+        background: rgba(100, 100, 200, 0.6);
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div id="search_container" class="col-md-5">
+            <input id="search" value="fred">
+        </div>
+        <div class="col-md-7" id="people">
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+
+<script>
+
+    var previous = "";
+
+    function updateSearch() {
+        var searchValue = $("#search").val();
+        if (previous !== searchValue && searchValue.length > 0) {
+            previous = searchValue;
+            $.get("/people", {query: searchValue}, function(response) {
+                var results = response["results"];
+                $("#people").empty();
+                $(results).each(function(index, person) {
+                    $("#people").append(person);
+                });
+                $(".exp-open").click(function() {
+                    var expname = $(this).attr("data-name");
+                    $("#search").val(expname);
+                });
+            });
+        }
+        setTimeout(updateSearch, 100);
+    }
+
+    updateSearch();
+
+
+</script>
+{% endblock %}

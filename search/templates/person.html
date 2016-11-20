@@ -1,0 +1,62 @@
+<div class="person">
+    <h2>{{ person.name }}
+    {% if person.birth != None and person.death != None %}
+        <span>{{ person.birth }} - {{ person.death }}</span>
+    {% endif %}
+    </h2>
+    <div class="factoids">
+        {% if person.languages|length != 0 %}
+        <div class="row">
+            <div class="col-md-2">Languages</div>
+            <div class="col-md-10">
+                {% for language in person.languages %}
+                <span class="language">{{ language }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="facts">
+        {% for fact in person.facts %}
+        <p>
+            {{ fact }}
+        </p>
+        {% endfor %}
+    </div>
+    <br>
+    {% if person.relevant_places|length != 0 %}
+    <div class="places row">
+        <h4 class="col-md-2">Timeline</h4>
+        <div class="col-md-10 place_container">
+        {% for role, place, note, day, start, end in person.relevant_places %}
+            <div class="place">
+                <h5>
+                    <span class="place_name">{{ place }}</span>
+                </h5>
+                <h6>
+                    {% if day %}
+                        <span>{{ day }}</span>
+                    {% else %}
+                        {% if start %}<span>{{ start }} - </span>{% endif %}
+                        {% if end %}<span>{{ end }}</span>{% endif %}
+                    {% endif %}
+                </h6>
+                <span>{% if note %}{{ note }}{% endif %}</span>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <div class="expeditions">
+        {% for xeac_id in person.links %}
+            {% set expedition = expeditions.get(xeac_id, None) %}
+            {% if expedition %}
+                {% set name = expedition.name.strip('"') %}
+                <span class="exp-open" data-name="{{ name }}">
+                    {{ name }}
+                </span>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <a href="http://data.library.amnh.org:8082/orbeon/xeac/id/{{ person.xeac_id }}" target="_blank">XEAC</a>
+</div>
