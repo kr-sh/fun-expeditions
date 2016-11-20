@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, redirect
 from database import load_people, load_keywords, load_expeditions
 from collections import defaultdict
 
@@ -60,6 +60,16 @@ def search_people():
                     results.append(treat(render_template('person.html', person=person, expeditions=expeditions), keyword))
     return jsonify({"results": results})
 
+
+@app.route('/expedition/new', methods=['GET'])
+def add_expedition():
+    return render_template("add.html")
+
+
+@app.route('/expedition/new', methods=['POST'])
+def add_expedition_request():
+    print request.form
+    return redirect('/expedition/new')
 
 if __name__ == '__main__':
     app.run()
