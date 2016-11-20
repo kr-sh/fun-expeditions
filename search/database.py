@@ -109,8 +109,9 @@ class Person(object):
         birth, death = None, None
         if 'existDates' in description:
             dates = description['existDates'].find('xeac:dateRange', NAMESPACES)
-            birth = re.match("\d*", dates.find('xeac:fromDate', NAMESPACES).text).group(0)
-            death = re.match("\d*", dates.find('xeac:toDate', NAMESPACES).text).group(0)
+            if dates is not None:
+	        birth = re.match("\d*", dates.find('xeac:fromDate', NAMESPACES).text).group(0)
+                death = re.match("\d*", dates.find('xeac:toDate', NAMESPACES).text).group(0)
         # Occupations
         occupations = []
         if 'occupations' in description:
@@ -241,10 +242,10 @@ def load_people():
             tree = ElementTree.fromstring(fp.read())
             xeac_id = tree.find('xeac:control', NAMESPACES).find('xeac:recordId', NAMESPACES).text
             content = tree.find('xeac:cpfDescription', NAMESPACES)
-            entity_type = content.find('xeac:identity', NAMESPACES).find('xeac:entityType', NAMESPACES).text
+	    entity_type = content.find('xeac:identity', NAMESPACES).find('xeac:entityType', NAMESPACES).text
             if entity_type == 'person':
-                person = Person.build(xeac_id, content)
-                people[xeac_id] = person
+		person = Person.build(xeac_id, content)
+		people[xeac_id] = person
     return people
 
 
