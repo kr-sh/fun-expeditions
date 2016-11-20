@@ -54,7 +54,7 @@ def search_people():
     for keyword in keywords:
         if query in keyword.lower():
             for xeac_id in keywords[keyword]:
-                if xeac_id not in history:
+                if xeac_id not in history and xeac_id in people:
                     person = people[xeac_id]
                     results.append(treat(render_template('person.html', person=person, expeditions=expeditions), keyword))
     return jsonify({"results": results})
